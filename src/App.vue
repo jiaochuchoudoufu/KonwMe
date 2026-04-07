@@ -1,0 +1,24 @@
+<template>
+  <div class="app">
+    <el-container>
+      <el-aside width="200px" class="sidebar">
+        <el-menu router>
+          <el-menu-item index="/">首页</el-menu-item>
+        </el-menu>
+      </el-aside>
+      <el-main>
+        <router-view />
+      </el-main>
+    </el-container>
+  </div>
+</template>
+
+<style scoped>
+.app {
+  height: 100vh;
+}
+.sidebar {
+  background: #f5f5f5;
+  border-right: 1px solid #e0e0e0;
+}
+</style>
