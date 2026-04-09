@@ -4,33 +4,33 @@
   
       <!-- 统计卡片 -->
       <el-row :gutter="20" class="stats-row">
-        <el-col :span="8">
-          <el-card>
-            <div class="stat-card">
-              <div class="stat-label">总收入</div>
-              <div class="stat-value income">¥{{ store.totalIncome }}</div>
+      <el-col :span="8">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-content">
+            <div class="stat-label">总收入</div>
+            <div class="stat-value income">¥{{ store.totalIncome }}</div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-content">
+            <div class="stat-label">总支出</div>
+            <div class="stat-value expense">¥{{ store.totalExpense }}</div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="8">
+        <el-card class="stat-card" shadow="hover">
+          <div class="stat-content">
+            <div class="stat-label">结余</div>
+            <div class="stat-value" :class="store.balance >= 0 ? 'income' : 'expense'">
+              ¥{{ store.balance }}
             </div>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card>
-            <div class="stat-card">
-              <div class="stat-label">总支出</div>
-              <div class="stat-value expense">¥{{ store.totalExpense }}</div>
-            </div>
-          </el-card>
-        </el-col>
-        <el-col :span="8">
-          <el-card>
-            <div class="stat-card">
-              <div class="stat-label">结余</div>
-              <div class="stat-value" :class="store.balance >= 0 ? 'income' : 'expense'">
-                ¥{{ store.balance }}
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   
       <!-- 添加按钮 -->
       <div class="action-bar">
@@ -40,30 +40,30 @@
       </div>
   
       <!-- 记录列表 -->
-      <el-table :data="store.records" stripe border>
-        <el-table-column prop="date" label="日期" width="120" />
-        <el-table-column prop="category" label="分类" width="120">
-          <template #default="{ row }">
-            <el-tag :type="row.type === 'income' ? 'success' : 'danger'">
-              {{ row.category }}
-            </el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="note" label="备注" />
-        <el-table-column prop="amount" label="金额" width="120" align="right">
-          <template #default="{ row }">
-            <span :class="row.type === 'income' ? 'income' : 'expense'">
-              {{ row.type === 'income' ? '+' : '-' }}¥{{ row.amount }}
-            </span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" width="100" align="center">
-          <template #default="{ row }">
-            <el-button type="primary" size="small" @click="editRecord(row)">编辑</el-button>
-            <el-button type="danger" size="small" @click="deleteRecord(row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <el-table :data="store.records" stripe border style="width: 100%">
+  <el-table-column prop="date" label="日期" width="120" />
+  <el-table-column prop="category" label="分类" width="120">
+    <template #default="{ row }">
+      <el-tag :type="row.type === 'income' ? 'success' : 'danger'">
+        {{ row.category }}
+      </el-tag>
+    </template>
+  </el-table-column>
+  <el-table-column prop="note" label="备注" />
+  <el-table-column prop="amount" label="金额" width="120" align="right">
+    <template #default="{ row }">
+      <span :class="row.type === 'income' ? 'income' : 'expense'">
+        {{ row.type === 'income' ? '+' : '-' }}¥{{ row.amount }}
+      </span>
+    </template>
+  </el-table-column>
+  <el-table-column label="操作" width="150" align="center" fixed="right">
+    <template #default="{ row }">
+      <el-button type="primary" size="small" @click="editRecord(row)">编辑</el-button>
+      <el-button type="danger" size="small" @click="deleteRecord(row.id)">删除</el-button>
+    </template>
+  </el-table-column>
+</el-table>
   
       <!-- 添加/编辑弹窗 -->
       <el-dialog v-model="showDialog" :title="dialogTitle" width="500px">
@@ -131,7 +131,7 @@
   
   const resetForm = () => {
     form.type = 'expense'
-    form.category = categories.value[0]
+    form.category = categories.value[0] || '餐饮'
     form.amount = 0
     form.date = new Date().toISOString().slice(0, 10)
     form.note = ''
@@ -141,7 +141,7 @@
   const editRecord = (record: LedgerRecord) => {
     editingId.value = record.id
     form.type = record.type
-    form.category = record.category
+    form.category = record.category || (record.type === 'income' ? '工资' : '餐饮')
     form.amount = record.amount
     form.date = record.date
     form.note = record.note || ''
@@ -226,4 +226,24 @@
   .action-bar {
     margin-bottom: 20px;
   }
+
+  /* 新增卡片悬停效果 */
+.stat-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stat-card:active {
+  transform: translateY(-2px);
+}
+
+.stat-content {
+  text-align: center;
+  padding: 10px;
+}
   </style>
