@@ -6,6 +6,11 @@ const routes = [
     name: 'home',
     component: () => import('../views/HomePage.vue'),
   },
+  {
+    path: '/ledger',
+    name: 'ledger',
+    component: () => import('../views/LedgerPage.vue'),
+  }
 ]
 
 const router = createRouter({

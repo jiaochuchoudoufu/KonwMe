@@ -4,6 +4,7 @@
       <el-aside width="200px" class="sidebar">
         <el-menu router>
           <el-menu-item index="/">首页</el-menu-item>
+          <el-menu-item index="/ledger">记账本</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>
