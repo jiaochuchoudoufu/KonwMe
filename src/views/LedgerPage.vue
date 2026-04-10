@@ -32,6 +32,32 @@
       </el-col>
     </el-row>
 
+    <!-- 月份筛选器 -->
+    <div class="filter-bar">
+      <el-date-picker
+        v-model="selectedMonth"
+        type="month"
+        placeholder="选择月份"
+        format="YYYY年MM月"
+        value-format="yyyy-MM"
+        @change="onMonthChange"
+      />
+    </div>
+
+    <!-- 图表区域（两列卡片布局） -->
+    <el-row :gutter="20" class="charts-row">
+      <el-col :xs="24" :sm="12">
+        <el-card class="chart-card" header="📈 每日支出趋势">
+          <ExpenseChart type="line" :key="chartKey" />
+        </el-card>
+      </el-col>
+      <el-col :xs="24" :sm="12">
+        <el-card class="chart-card" header="🥧 支出分类占比">
+          <ExpenseChart type="pie" :key="chartKey" />
+        </el-card>
+      </el-col>
+    </el-row>
+
     <!-- AI 分析按钮 -->
     <div class="ai-button-wrapper">
       <el-button 
@@ -137,16 +163,25 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { useLedgerStore, type LedgerRecord } from '../stores/ledger'
 import { analyzeExpenseStream } from '../services/ai'
+import ExpenseChart from '../components/ExpenseChart.vue'
 
 const store = useLedgerStore()
 const showDialog = ref(false)
 const editingId = ref<number | null>(null)
 
+// 月份筛选
+const selectedMonth = ref(new Date().toISOString().slice(0, 7))
+const chartKey = ref(0)
+
+const onMonthChange = () => {
+  chartKey.value++
+}
+
 // AI 相关
 const aiLoading = ref(false)
 const showAiDialog = ref(false)
 const aiResult = ref('')
-const displayText = ref('')  // 用于打字机显示
+const displayText = ref('')
 let typingTimer: any = null
 
 // 表单数据
@@ -235,10 +270,8 @@ const deleteRecord = (id: number) => {
 
 // 监听 aiResult 的变化，实现打字机效果
 watch(aiResult, (newText) => {
-  // 清除之前的定时器
   if (typingTimer) clearInterval(typingTimer)
   
-  // 重置显示文本
   displayText.value = ''
   let index = 0
   
@@ -249,10 +282,10 @@ watch(aiResult, (newText) => {
     } else {
       clearInterval(typingTimer)
     }
-  }, 30)  // 每 30ms 显示一个字
+  }, 30)
 })
 
-// AI 分析函数（流式输出 + 打字机效果）
+// AI 分析函数
 const openAIAnalysis = async () => {
   if (store.records.length === 0) {
     ElMessage.warning('暂无记录，请先添加一些收支记录')
@@ -323,6 +356,19 @@ const openAIAnalysis = async () => {
   color: #f56c6c;
 }
 
+.filter-bar {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.charts-row {
+  margin: 20px 0;
+}
+
+.chart-card {
+  height: 100%;
+}
+
 .action-bar {
   margin-bottom: 20px;
 }
@@ -390,5 +436,11 @@ const openAIAnalysis = async () => {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+@media (max-width: 768px) {
+  .stats-row {
+    flex-direction: column;
+  }
 }
 </style>
