@@ -1,1 +1,0 @@
-import{c as e,m as t,t as n,u as r}from"./index-Doul6sQa.js";var i={},a={class:`home`};function o(n,i){return t(),r(`div`,a,[...i[0]||=[e(`h1`,null,`🏠 首页`,-1),e(`p`,null,`欢迎使用 LifeLog AI`,-1)]])}var s=n(i,[[`render`,o],[`__scopeId`,`data-v-69228290`]]);export{s as default};
