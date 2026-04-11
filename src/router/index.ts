@@ -10,6 +10,11 @@ const routes = [
     path: '/ledger',
     name: 'ledger',
     component: () => import('../views/LedgerPage.vue'),
+  },
+  {
+    path: '/journal',
+    name: 'journal',
+    component: () => import('../views/JournalPage.vue')
   }
 ]
 

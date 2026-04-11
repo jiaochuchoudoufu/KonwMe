@@ -66,9 +66,9 @@ function deleteRecord(id: number) {
     } else {
       // 添加示例数据
         records.value = [
-            { id: 1, type: 'income', amount: 5000, category: '工资', date: '2024-04-01', note: '4月工资' },
-            { id: 2, type: 'expense', amount: 68, category: '餐饮', date: '2024-04-02', note: '火锅' },
-            { id: 3, type: 'expense', amount: 1200, category: '房租', date: '2024-04-01', note: '4月房租' },
+            { id: 1, type: 'income', amount: 5000, category: '工资', date: '2024-04-01', note: '4月工资(示例数据可删除）' },
+            { id: 2, type: 'expense', amount: 68, category: '餐饮', date: '2024-04-02', note: '火锅(示例数据可删除）' },
+            { id: 3, type: 'expense', amount: 1200, category: '房租', date: '2024-04-01', note: '4月房租(示例数据可删除）' },
         ]
     }
 }
