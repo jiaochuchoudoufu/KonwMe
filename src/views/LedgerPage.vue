@@ -76,10 +76,14 @@
       <el-button type="primary" @click="showDialog = true">
         ➕ 添加记录
       </el-button>
+      <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+        🗑️ 批量删除 ({{ selectedIds.length }})
+      </el-button>
     </div>
 
     <!-- 记录列表 -->
-    <el-table :data="store.records" stripe border style="width: 100%">
+    <el-table :data="store.records" stripe border style="width: 100%" @selection-change="handleSelectionChange">
+      <el-table-column type="selection" width="55" />
       <el-table-column prop="date" label="日期" width="120" />
       <el-table-column prop="category" label="分类" width="120">
         <template #default="{ row }">
@@ -127,7 +131,7 @@
           <el-input-number v-model="form.amount" :min="0" :precision="2" />
         </el-form-item>
         <el-form-item label="日期">
-          <el-date-picker v-model="form.date" type="date" format="YYYY-MM-DD" />
+          <el-date-picker v-model="form.date" type="date" format="YYYY-MM-DD" value-format="YYYY-MM-DD" :disabled-date="disabledDate" />
         </el-form-item>
         <el-form-item label="备注">
           <el-input v-model="form.note" placeholder="可选" />
@@ -158,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch } from 'vue'
+import { ref, reactive, computed, watch, handleError } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { useLedgerStore, type LedgerRecord } from '../stores/ledger'
@@ -307,6 +311,43 @@ const openAIAnalysis = async () => {
     aiLoading.value = false
   }
 }
+
+//禁用未来日期
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
+}
+
+//添加批量删除相关状态
+const selectedIds = ref<number[]>([])
+
+//处理表格多选变化
+const handleSelectionChange = (selection: LedgerRecord[]) => {
+  selectedIds.value = selection.map(item => item.id)
+}
+
+//批量删除
+const batchDelete = () => {
+  if(selectedIds.value.length === 0) return
+
+  ElMessageBox.confirm(
+    `确定删除选中的 ${selectedIds.value.length} 条记录吗？`,
+    '批量删除',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    //逐个删除
+    selectedIds.value.forEach(id => {
+      store.deleteRecord(id)
+    })
+    ElMessage.success(`成功删除 ${selectedIds.value.length} 条记录`)
+    selectedIds.value = []  // 清空选中
+  }).catch(() => {
+    ElMessage.info('已取消删除')
+  })
+}
 </script>
 
 <style scoped>
@@ -442,5 +483,23 @@ const openAIAnalysis = async () => {
   .stats-row {
     flex-direction: column;
   }
+}
+
+/* 增大复选框点击区域 */
+:deep(.el-checkbox) {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px;
+  margin: -6px;
+}
+
+:deep(.el-checkbox__input) {
+  transform: scale(1.15);
+}
+
+:deep(.el-checkbox__inner) {
+  width: 18px;
+  height: 18px;
 }
 </style>
