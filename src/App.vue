@@ -12,8 +12,15 @@
         <router-view />
       </el-main>
     </el-container>
+
+    <!--AI 悬浮窗-->
+    <AiFloatButton />
   </div>
 </template>
+
+<script setup lang="ts">
+import AiFloatButton from './components/AiFloatButton.vue'
+</script>
 
 <style scoped>
 .app {
