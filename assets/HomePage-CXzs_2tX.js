@@ -1,0 +1,1 @@
+import{f as e,l as t,t as n,v as r}from"./index-DnceFZZP.js";var i={},a={class:`home`};function o(n,i){return r(),e(`div`,a,[...i[0]||=[t(`h1`,null,`🏠 首页`,-1),t(`p`,null,`欢迎使用 LifeLog AI`,-1)]])}var s=n(i,[[`render`,o],[`__scopeId`,`data-v-69228290`]]);export{s as default};
