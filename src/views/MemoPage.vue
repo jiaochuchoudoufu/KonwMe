@@ -7,6 +7,9 @@
         <el-button type="primary" @click="openAddDialog">
           ➕ 添加待办
         </el-button>
+        <el-button type="warning" @click="getAISuggestion" :loading="aiLoading">
+          🤖 AI 智能建议
+        </el-button>
       </div>
   
       <!-- 今日待办提醒 -->
@@ -59,15 +62,23 @@
           暂无已完成待办
         </div>
         <div v-else class="todo-list">
-          <div v-for="todo in store.completedTodos" :key="todo.id" class="todo-item completed-item">
+          <div v-for="todo in store.completedTodos" :key="todo.id" class="todo-item" 
+          :class="[todo.priority, { overdue: isOverdue(todo.date) && !todo.completed }]">
             <el-checkbox :model-value="todo.completed" @change="toggleComplete(todo.id)">
-              <span class="completed">{{ todo.title }}</span>
+              <span :class="{ completed: todo.completed }">{{ todo.title }}</span>
             </el-checkbox>
             <div class="todo-meta">
               <el-tag :type="getPriorityType(todo.priority)" size="small">
                 {{ getPriorityText(todo.priority) }}
               </el-tag>
-              <span class="todo-date">完成于: {{ todo.date }}</span>
+              <span class="todo-date" 
+              :class="{ 'overdue-text': isOverdue(todo.date) && !todo.completed }">
+              完成于: {{ todo.date }}
+                <span v-if="isOverdue(todo.date) && !todo.completed" class="overdue-badge">
+                  已逾期
+                </span>
+              </span>
+              <el-button type="primary" size="small" @click="editTodo(todo)">编辑</el-button>
               <el-button type="danger" size="small" @click="deleteTodo(todo.id)">删除</el-button>
             </div>
           </div>
@@ -92,9 +103,9 @@
           </el-form-item>
           <el-form-item label="优先级">
             <el-radio-group v-model="form.priority">
-              <el-radio label="high">高</el-radio>
-              <el-radio label="medium">中</el-radio>
-              <el-radio label="low">低</el-radio>
+              <el-radio value="high">高</el-radio>
+              <el-radio value="medium">中</el-radio>
+              <el-radio value="low">低</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-form>
@@ -104,12 +115,30 @@
         </template>
       </el-dialog>
     </div>
+
+    <!-- AI 建议弹窗 -->
+<el-dialog v-model="showAiDialog" title="🤖 AI 智能建议" width="90%" class="ai-dialog">
+  <div class="ai-content">
+    <div v-if="aiLoading" class="ai-loading">
+      <el-icon class="is-loading"><Loading /></el-icon>
+      <span>AI 正在分析中...</span>
+    </div>
+    <div v-else class="ai-result">
+      <div class="typing-text">{{ aiSuggestion }}</div>
+    </div>
+  </div>
+  <template #footer>
+    <el-button @click="showAiDialog = false">关闭</el-button>
+  </template>
+</el-dialog>
   </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed } from 'vue';
+import { ref, reactive, computed, onMounted } from 'vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { useMemoStore, type Todo } from '@/stores/memo';
+import { analyzeTodoSuggestions } from '@/services/ai';
+import { Loading } from '@element-plus/icons-vue';
 
 const store = useMemoStore()
 const showDialog = ref(false)
@@ -217,6 +246,57 @@ const deleteTodo = (id: number) => {
     ElMessage.success('删除成功')
   })
 }
+
+//判断是否逾期
+const isOverdue = (date: string) => {
+  const today = new Date().toISOString().slice(0, 10)
+  return date < today
+}
+
+//页面加载时检查并发送提醒
+onMounted(() => {
+  //请求通知权限
+  if (Notification.permission === 'default') {
+    Notification.requestPermission()
+  }
+
+  //检查今日代办并提醒
+  const today = new Date().toISOString().slice(0, 10)
+  const todayTodos = store.todos.filter(t => t.date === today && !t.completed)
+
+  if(todayTodos.length > 0 && Notification.permission === 'granted') {
+    const titles = todayTodos.map(t => t.title).join('、')
+    new Notification('📋 今日待办提醒',{
+      body: `你今天还有 ${todayTodos.length} 项待办未完成：${titles}`,
+      icon: '/favicon.ico'
+    })
+  }
+})
+
+//ai建议函数
+const aiLoading = ref(false)
+const showAiDialog = ref(false)
+const aiSuggestion = ref('')
+
+const getAISuggestion = async () => {
+  if(store.todos.length === 0) {
+    ElMessage.warning('暂无待办，添加一些后再来获取建议吧~')
+    return
+  }
+
+  aiLoading.value = true
+  showAiDialog.value = true
+  aiSuggestion.value = ''
+
+  try {
+    const reslut = await analyzeTodoSuggestions(store.todos)
+    aiSuggestion.value = reslut
+  } catch (error) {
+    aiSuggestion.value = '分析失败，请稍后再试'
+  } finally {
+    aiLoading.value = false
+  }
+}
 </script>
 
 <style scoped>
@@ -299,5 +379,25 @@ const deleteTodo = (id: number) => {
   color: #adb5bd;
   background: #f8f9fa;
   border-radius: 12px;
+}
+
+/* 逾期样式 */
+.todo-item.overdue {
+  background: #fff0f0;
+  border-left-color: #f56c6c;
+}
+
+.overdue-text {
+  color: #f56c6c;
+  font-weight: 500;
+}
+
+.overdue-badge {
+  background: #f56c6c;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  margin-left: 8px;
 }
 </style>

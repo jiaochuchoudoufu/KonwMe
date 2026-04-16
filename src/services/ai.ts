@@ -92,3 +92,37 @@ export async function sendMessageStream(
         onChunk
       )
     }
+
+// 分析待办建议
+export async function analyzeTodoSuggestions(todos: any[]) {
+  if (todos.length === 0) {
+    return '暂无待办，添加一些后我来帮你规划吧～'
+  }
+
+  const today = new Date().toISOString().slice(0, 10)
+  const overdueTodos = todos.filter(t => t.date < today && !t.completed)
+  const todayTodos = todos.filter(t => t.date === today && !t.completed)
+  const upcomingTodos = todos.filter(t => t.date > today && !t.completed)
+
+  const systemPrompt = `你是一个时间管理助手，帮助用户规划待办事项。`
+  
+  const userPrompt = `
+请根据以下待办数据，给出：
+1. 紧急事项提醒（逾期的待办）
+2. 今日重点（今天的待办）
+3. 时间管理建议（1-2条）
+
+数据：
+- 逾期待办：${overdueTodos.length} 项，标题：${overdueTodos.map(t => t.title).join('、') || '无'}
+- 今日待办：${todayTodos.length} 项，标题：${todayTodos.map(t => t.title).join('、') || '无'}
+- 未来待办：${upcomingTodos.length} 项
+
+回复要简洁友好，有鼓励性。
+`
+  return sendMessageStream([
+    { role: 'system', content: systemPrompt },
+    { role: 'user', content: userPrompt },
+  ],
+  () => {}
+)
+}
