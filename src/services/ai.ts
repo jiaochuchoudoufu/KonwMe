@@ -126,3 +126,31 @@ export async function analyzeTodoSuggestions(todos: any[]) {
   () => {}
 )
 }
+
+// 分析天气对心情的影响
+export async function analyzeWeatherImpact(weather: any) {
+  const systemPrompt = `你是一个生活助手，回复要极其简短，每句话不超过15个字，总字数不超过80字。`
+  
+  const userPrompt = `
+当前天气情况：
+- 城市：${weather.city}
+- 天气：${weather.text}
+- 温度：${weather.temp}°C
+- 湿度：${weather.humidity}%
+- 风速：${weather.windSpeed} km/h
+
+请给出：
+1. 这种天气通常给人的感受
+2. 对用户心情的可能影响
+3. 1-2条改善心情或利用天气的建议
+
+回复要温暖友好，有鼓励性。
+`
+  return sendMessageStream(
+    [
+      { role: 'system', content: systemPrompt },
+      { role: 'user', content: userPrompt }
+    ],
+    () => {}
+  )
+}

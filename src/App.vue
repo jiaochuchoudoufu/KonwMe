@@ -7,6 +7,7 @@
           <el-menu-item index="/ledger">记账本</el-menu-item>
           <el-menu-item index="/journal">日记</el-menu-item>
           <el-menu-item index="/memo">备忘录</el-menu-item>
+          <!-- <el-menu-item index="/weather">天气</el-menu-item> -->
         </el-menu>
       </el-aside>
       <el-main>
