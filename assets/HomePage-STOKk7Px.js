@@ -1,1 +1,0 @@
-import{p as e,t,u as n,y as r}from"./index-8r-yd6UZ.js";var i={},a={class:`home`};function o(t,i){return r(),e(`div`,a,[...i[0]||=[n(`h1`,null,`🏠 首页`,-1),n(`p`,null,`欢迎使用 LifeLog AI`,-1)]])}var s=t(i,[[`render`,o],[`__scopeId`,`data-v-69228290`]]);export{s as default};
