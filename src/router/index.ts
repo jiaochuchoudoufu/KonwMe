@@ -20,11 +20,6 @@ const routes = [
     path: '/memo',
     name: 'memo',
     component: () => import('../views/MemoPage.vue')
-  },
-  {
-    path: '/weather',
-    name: 'weather',
-    component: () => import('../views/WeatherPage.vue')
   }
 ]
 
