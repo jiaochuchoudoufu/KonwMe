@@ -2,25 +2,25 @@
   <div class="ledger-page">
     <h1>📊 记账本</h1>
 
-    <!-- 统计卡片 -->
-    <el-row :gutter="20" class="stats-row">
-      <el-col :span="8">
+    <!-- 统计卡片 - 移动端优化 -->
+    <div class="stats-container">
+      <div class="stat-card-wrapper">
         <el-card class="stat-card" shadow="hover">
           <div class="stat-content">
             <div class="stat-label">总收入</div>
             <div class="stat-value income">¥{{ store.totalIncome }}</div>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="8">
+      </div>
+      <div class="stat-card-wrapper">
         <el-card class="stat-card" shadow="hover">
           <div class="stat-content">
             <div class="stat-label">总支出</div>
             <div class="stat-value expense">¥{{ store.totalExpense }}</div>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="8">
+      </div>
+      <div class="stat-card-wrapper">
         <el-card class="stat-card" shadow="hover">
           <div class="stat-content">
             <div class="stat-label">结余</div>
@@ -29,8 +29,8 @@
             </div>
           </div>
         </el-card>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
 
     <!-- 月份筛选器 -->
     <div class="filter-bar">
@@ -81,40 +81,74 @@
       </el-button>
     </div>
 
-    <!-- 记录列表 -->
-    <el-table :data="store.records" stripe border style="width: 100%" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" />
-      <el-table-column prop="date" label="日期" width="120" />
-      <el-table-column prop="category" label="分类" width="120">
-        <template #default="{ row }">
-          <el-tag :type="row.type === 'income' ? 'success' : 'danger'">
-            {{ row.category }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="note" label="备注" />
-      <el-table-column prop="amount" label="金额" width="120" align="right">
-        <template #default="{ row }">
-          <span :class="row.type === 'income' ? 'income' : 'expense'">
-            {{ row.type === 'income' ? '+' : '-' }}¥{{ row.amount }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="150" align="center" fixed="right">
-        <template #default="{ row }">
-          <el-button type="primary" size="small" @click="editRecord(row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="deleteRecord(row.id)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 记录列表 - 移动端优化为卡片模式 -->
+    <div class="records-container">
+      <!-- PC端：表格 -->
+      <el-table 
+        v-if="!isMobile"
+        :data="store.records" 
+        stripe 
+        border 
+        style="width: 100%" 
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" />
+        <el-table-column prop="date" label="日期" width="120" />
+        <el-table-column prop="category" label="分类" width="120">
+          <template #default="{ row }">
+            <el-tag :type="row.type === 'income' ? 'success' : 'danger'">
+              {{ row.category }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="note" label="备注" />
+        <el-table-column prop="amount" label="金额" width="120" align="right">
+          <template #default="{ row }">
+            <span :class="row.type === 'income' ? 'income' : 'expense'">
+              {{ row.type === 'income' ? '+' : '-' }}¥{{ row.amount }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="150" align="center" fixed="right">
+          <template #default="{ row }">
+            <el-button type="primary" size="small" @click="editRecord(row)">编辑</el-button>
+            <el-button type="danger" size="small" @click="deleteRecord(row.id)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <!-- 移动端：卡片列表 -->
+      <div v-else class="mobile-record-list">
+        <div v-for="record in store.records" :key="record.id" class="record-card">
+          <div class="record-header">
+            <div class="record-date">{{ record.date }}</div>
+            <div class="record-actions">
+              <el-button type="primary" size="small" text @click="editRecord(record)">编辑</el-button>
+              <el-button type="danger" size="small" text @click="deleteRecord(record.id)">删除</el-button>
+            </div>
+          </div>
+          <div class="record-body">
+            <div class="record-info">
+              <el-tag :type="record.type === 'income' ? 'success' : 'danger'" size="small">
+                {{ record.category }}
+              </el-tag>
+              <span v-if="record.note" class="record-note">{{ record.note }}</span>
+            </div>
+            <div class="record-amount" :class="record.type === 'income' ? 'income' : 'expense'">
+              {{ record.type === 'income' ? '+' : '-' }}¥{{ record.amount }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- 添加/编辑弹窗 -->
-    <el-dialog v-model="showDialog" :title="dialogTitle" width="500px">
+    <el-dialog v-model="showDialog" :title="dialogTitle" :width="dialogWidth">
       <el-form :model="form" label-width="80px">
         <el-form-item label="类型">
           <el-radio-group v-model="form.type">
-            <el-radio label="income">收入</el-radio>
-            <el-radio label="expense">支出</el-radio>
+            <el-radio value="income">收入</el-radio>
+            <el-radio value="expense">支出</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="分类">
@@ -144,7 +178,7 @@
     </el-dialog>
 
     <!-- AI 分析结果弹窗 -->
-    <el-dialog v-model="showAiDialog" title="🤖 AI 消费分析" width="90%" class="ai-dialog">
+    <el-dialog v-model="showAiDialog" title="🤖 AI 消费分析" :width="dialogWidth" class="ai-dialog">
       <div class="ai-content">
         <div v-if="aiLoading" class="ai-loading">
           <el-icon class="is-loading"><Loading /></el-icon>
@@ -162,7 +196,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, watch, handleError } from 'vue'
+import { ref, reactive, computed, watch, onMounted, onUnmounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { useLedgerStore, type LedgerRecord } from '../stores/ledger'
@@ -172,6 +206,22 @@ import ExpenseChart from '../components/ExpenseChart.vue'
 const store = useLedgerStore()
 const showDialog = ref(false)
 const editingId = ref<number | null>(null)
+
+// 响应式断点
+const isMobile = ref(window.innerWidth < 768)
+const dialogWidth = computed(() => isMobile.value ? '95%' : '500px')
+
+const handleResize = () => {
+  isMobile.value = window.innerWidth < 768
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
 
 // 月份筛选
 const selectedMonth = ref(new Date().toISOString().slice(0, 7))
@@ -355,8 +405,16 @@ const batchDelete = () => {
   padding: 20px;
 }
 
-.stats-row {
+/* ========== 统计卡片响应式布局 ========== */
+.stats-container {
+  display: flex;
+  gap: 16px;
   margin-bottom: 20px;
+}
+
+.stat-card-wrapper {
+  flex: 1;
+  min-width: 0; /* 防止溢出 */
 }
 
 .stat-card {
@@ -385,8 +443,35 @@ const batchDelete = () => {
 }
 
 .stat-value {
-  font-size: 28px;
+  font-size: 24px;
   font-weight: bold;
+}
+
+/* 移动端统计卡片字体缩小 */
+@media (max-width: 768px) {
+  .stat-value {
+    font-size: 18px;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+  }
+  
+  .stats-container {
+    gap: 8px;
+  }
+}
+
+/* 小屏幕时统计卡片换行 */
+@media (max-width: 480px) {
+  .stats-container {
+    flex-wrap: wrap;
+  }
+  
+  .stat-card-wrapper {
+    flex: 1 1 calc(33.33% - 6px);
+    min-width: 100px;
+  }
 }
 
 .income {
@@ -411,7 +496,10 @@ const batchDelete = () => {
 }
 
 .action-bar {
-  margin-bottom: 20px;
+  margin: 20px 0;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .ai-button-wrapper {
@@ -479,10 +567,61 @@ const batchDelete = () => {
   50% { opacity: 0; }
 }
 
-@media (max-width: 768px) {
-  .stats-row {
-    flex-direction: column;
-  }
+/* ========== 移动端卡片列表样式 ========== */
+.mobile-record-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.record-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f0f0f0;
+}
+
+.record-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.record-date {
+  font-size: 14px;
+  color: #666;
+}
+
+.record-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.record-body {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.record-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.record-note {
+  font-size: 12px;
+  color: #999;
+}
+
+.record-amount {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 /* 增大复选框点击区域 */
@@ -501,5 +640,24 @@ const batchDelete = () => {
 :deep(.el-checkbox__inner) {
   width: 18px;
   height: 18px;
+}
+
+/* 移动端表格滚动 */
+@media (max-width: 768px) {
+  .ledger-page {
+    padding: 12px;
+  }
+  
+  .action-bar {
+    flex-direction: column;
+  }
+  
+  .action-bar .el-button {
+    width: 100%;
+  }
+  
+  .ai-btn {
+    width: 100%;
+  }
 }
 </style>

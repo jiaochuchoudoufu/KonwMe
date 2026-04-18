@@ -42,6 +42,7 @@
             placeholder="选择日期"
             format="YYYY-MM-DD"
             value-format="YYYY-MM-DD"
+            :disabled-date="disabledDate"
           />
         </el-form-item>
         <el-form-item label="心情">
@@ -187,6 +188,11 @@ const deleteEntry = (id: number) => {
     store.deleteEntry(id)
     ElMessage.success('删除成功')
   })
+}
+
+// 禁用未来日期
+const disabledDate = (time: Date) => {
+  return time.getTime() > Date.now()
 }
 </script>
 

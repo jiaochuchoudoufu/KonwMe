@@ -5,6 +5,8 @@
       <h1>LifeLog AI</h1>
       <p>你的智能生活记录助手</p>
     </div>
+    <!--AI 智能建议卡片-->
+    <AISuggestion />
 
     <!-- 两列布局（PC端） -->
     <div class="dashboard-grid">
@@ -23,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import AISuggestion from '@/components/AISuggestion.vue';
 import WeatherCard from '../components/WeatherCard.vue'
 import TodoCard from '../components/TodoCard.vue'
 import AICard from '../components/AICard.vue'
