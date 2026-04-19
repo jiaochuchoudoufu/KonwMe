@@ -5,10 +5,18 @@
     </div>
   </template>
   
-  <script setup lang="ts">
-  import { ref, onMounted, watch, onUnmounted, computed } from 'vue'
-  import * as echarts from 'echarts'
-  import { useLedgerStore } from '../stores/ledger'
+<script setup lang="ts">
+import { ref, onMounted, watch, onUnmounted, computed } from 'vue'
+/* import * as echarts from 'echarts' */
+// 改成按需导入（减小体积）
+import * as echarts from 'echarts/core'
+import { LineChart, PieChart } from 'echarts/charts'
+import { TitleComponent, TooltipComponent, GridComponent, LegendComponent } from 'echarts/components'
+import { CanvasRenderer } from 'echarts/renderers'
+
+echarts.use([TitleComponent, TooltipComponent, GridComponent, LegendComponent, LineChart, PieChart, CanvasRenderer])
+
+import { useLedgerStore } from '../stores/ledger'
   
   const props = defineProps<{ type: 'line' | 'pie' }>()
   const store = useLedgerStore()

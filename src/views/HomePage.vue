@@ -26,9 +26,10 @@
 
 <script setup lang="ts">
 import AISuggestion from '@/components/AISuggestion.vue';
-import WeatherCard from '../components/WeatherCard.vue'
-import TodoCard from '../components/TodoCard.vue'
-import AICard from '../components/AICard.vue'
+import WeatherCard from '../components/WeatherCard.vue';
+import TodoCard from '../components/TodoCard.vue';
+import AICard from '../components/AICard.vue';
+
 </script>
 
 <style scoped>
