@@ -1,6 +1,7 @@
 # lifelog-ai
 
 This template should help get you started developing with Vue 3 in Vite.
+预览网址：https://jiaochuchoudoufu.github.io/KonwMe/
 
 ## Recommended IDE Setup
 

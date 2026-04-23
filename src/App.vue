@@ -25,6 +25,10 @@
             <span class="menu-icon">📌</span>
             <span class="menu-label">备忘录</span>
           </el-menu-item>
+          <el-menu-item index="/data-manager">
+            <span class="menu-icon">💾</span>
+            <span class="menu-label">数据管理</span>
+          </el-menu-item>
         </el-menu>
         
         <!-- 折叠/展开按钮 -->
@@ -83,7 +87,8 @@ const navItems = [
   { path: '/', label: '首页', icon: '🏠' },
   { path: '/ledger', label: '记账', icon: '📊' },
   { path: '/journal', label: '日记', icon: '📝' },
-  { path: '/memo', label: '备忘', icon: '📌' }
+  { path: '/memo', label: '备忘', icon: '📌' },
+  { path: '/data-manager', label: '数据', icon: '💾' },
 ]
 
 const handleResize = () => {
@@ -255,6 +260,35 @@ onUnmounted(() => {
 @media (max-width: 768px) {
   .pc-layout {
     display: none;
+  }
+}
+
+/* 全局移动端适配 */
+* {
+  -webkit-tap-highlight-color: transparent; /* 移除移动端点击灰色背景 */
+}
+
+/* 增大按钮点击区域 */
+button,
+.el-button,
+.nav-item,
+.menu-item {
+  touch-action: manipulation; /* 优化触摸响应 */
+}
+
+/* 移动端字体调整 */
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+  
+  /* 增大表单元素点击区域 */
+  input,
+  select,
+  textarea,
+  .el-input__inner,
+  .el-textarea__inner {
+    font-size: 16px !important; /* 防止 iOS 缩放 */
   }
 }
 </style>
