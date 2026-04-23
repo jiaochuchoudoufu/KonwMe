@@ -23,7 +23,7 @@ export const useMemoStore = defineStore ('memo', () => {
             todos.value = [
                 {
                   id: 1,
-                  title: '完成记账本模块(示例数据)',
+                  title: '洗碗(示例数据)',
                   completed: true,
                   date: '2025-04-10',
                   priority: 'high',
@@ -31,7 +31,7 @@ export const useMemoStore = defineStore ('memo', () => {
                 },
                 {
                   id: 2,
-                  title: '学习 TypeScript(示例数据)',
+                  title: '洗衣服(示例数据)',
                   completed: false,
                   date: '2025-04-15',
                   priority: 'medium',
@@ -39,7 +39,7 @@ export const useMemoStore = defineStore ('memo', () => {
                 },
                 {
                   id: 3,
-                  title: '整理项目文档(示例数据)',
+                  title: '睡觉(示例数据)',
                   completed: false,
                   date: '2025-04-12',
                   priority: 'low',

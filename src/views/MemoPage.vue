@@ -339,6 +339,9 @@ const getAISuggestion = async () => {
   background: #f8f9fa;
   border-radius: 8px;
   transition: all 0.2s ease;
+  /* 修复溢出问题 */
+  overflow: hidden;
+  width: 100%;
 }
 
 .todo-item.high {
@@ -357,10 +360,25 @@ const getAISuggestion = async () => {
   opacity: 0.7;
 }
 
+/* 左侧 checkbox 区域 */
+.todo-item :deep(.el-checkbox) {
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+/* 中间内容区域 */
+.todo-item .el-checkbox + span {
+  flex: 1;
+  min-width: 0;  /* 允许文字截断 */
+  word-break: break-word;
+  white-space: normal;
+}
+
 .todo-meta {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .todo-date {
@@ -381,23 +399,53 @@ const getAISuggestion = async () => {
   border-radius: 12px;
 }
 
-/* 逾期样式 */
-.todo-item.overdue {
-  background: #fff0f0;
-  border-left-color: #f56c6c;
+/* ========== 移动端适配 ========== */
+@media (max-width: 768px) {
+  .memo-page {
+    padding: 12px;
+  }
+  
+  .todo-item {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  /* 第一行：checkbox + 标题 */
+  .todo-item :deep(.el-checkbox) {
+    width: auto;
+  }
+  
+  .todo-item .el-checkbox + span {
+    flex: 1;
+    font-size: 14px;
+  }
+  
+  /* 第二行：元数据（优先级、日期、按钮） */
+  .todo-meta {
+    width: 100%;
+    margin-left: 26px;  /* 对齐 checkbox 位置 */
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  .todo-date {
+    font-size: 11px;
+  }
+  
+  /* 按钮缩小 */
+  .todo-meta .el-button--small {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }
 
-.overdue-text {
-  color: #f56c6c;
-  font-weight: 500;
-}
-
-.overdue-badge {
-  background: #f56c6c;
-  color: white;
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 10px;
-  margin-left: 8px;
+/* 小屏幕适配 */
+@media (max-width: 480px) {
+  .todo-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
 }
 </style>
