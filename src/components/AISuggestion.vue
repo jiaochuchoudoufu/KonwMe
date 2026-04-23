@@ -4,7 +4,7 @@
         <div class="header-left">
           <span class="icon">🤖</span>
           <span class="title">AI 智能建议</span>
-          <span class="badge">每日更新</span>
+          
         </div>
         <el-button 
           text 

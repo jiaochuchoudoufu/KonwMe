@@ -62,15 +62,12 @@
       </div>
     </div>
 
-    <!-- AI 悬浮窗 -->
-    <AiFloatButton :class="{ 'mobile-float': isMobile }" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import AiFloatButton from './components/AiFloatButton.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -242,12 +239,6 @@ onUnmounted(() => {
 
 .nav-label {
   font-size: 12px;
-}
-
-/* AI 悬浮窗移动端适配 */
-.mobile-float {
-  bottom: 70px !important;
-  right: 16px !important;
 }
 
 /* 响应式 */
