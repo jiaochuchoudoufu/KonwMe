@@ -7,19 +7,7 @@ var e=`sk-f887471d498e4762a82d1169b8433c9f`,t=`https://api.deepseek.com/v1/chat/
     
     消费记录：
     ${JSON.stringify(e,null,2)}
-    `}],t)}async function i(e){if(e.length===0)return`暂无待办，添加一些后我来帮你规划吧～`;let t=new Date().toISOString().slice(0,10),r=e.filter(e=>e.date<t&&!e.completed),i=e.filter(e=>e.date===t&&!e.completed),a=e.filter(e=>e.date>t&&!e.completed);return n([{role:`system`,content:`你是一个时间管理助手，帮助用户规划待办事项。`},{role:`user`,content:`
-请根据以下待办数据，给出：
-1. 紧急事项提醒（逾期的待办）
-2. 今日重点（今天的待办）
-3. 时间管理建议（1-2条）
-
-数据：
-- 逾期待办：${r.length} 项，标题：${r.map(e=>e.title).join(`、`)||`无`}
-- 今日待办：${i.length} 项，标题：${i.map(e=>e.title).join(`、`)||`无`}
-- 未来待办：${a.length} 项
-
-回复要简洁友好，有鼓励性。
-`}],()=>{})}async function a(e){return n([{role:`system`,content:`你是一个生活助手，回复要极其简短，每句话不超过15个字，总字数不超过80字。`},{role:`user`,content:`
+    `}],t)}async function i(e){return n([{role:`system`,content:`你是一个生活助手，回复要极其简短，每句话不超过15个字，总字数不超过80字。`},{role:`user`,content:`
 当前天气情况：
 - 城市：${e.city}
 - 天气：${e.text}
@@ -33,4 +21,4 @@ var e=`sk-f887471d498e4762a82d1169b8433c9f`,t=`https://api.deepseek.com/v1/chat/
 3. 1-2条改善心情或利用天气的建议
 
 回复要温暖友好，有鼓励性。
-`}],()=>{})}export{n as i,i as n,a as r,r as t};
+`}],()=>{})}export{i as n,n as r,r as t};
