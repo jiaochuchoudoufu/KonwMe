@@ -76,7 +76,13 @@
       <el-button type="primary" @click="showDialog = true">
         ➕ 添加记录
       </el-button>
-      <el-button type="danger" :disabled="selectedIds.length === 0" @click="batchDelete">
+      <!-- 只在 PC 端显示批量删除按钮 -->
+      <el-button 
+        v-if="!isMobile"
+        type="danger" 
+        :disabled="selectedIds.length === 0" 
+        @click="batchDelete"
+      >
         🗑️ 批量删除 ({{ selectedIds.length }})
       </el-button>
     </div>
@@ -398,6 +404,7 @@ const batchDelete = () => {
     ElMessage.info('已取消删除')
   })
 }
+
 </script>
 
 <style scoped>
