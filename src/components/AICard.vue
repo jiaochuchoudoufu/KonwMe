@@ -1,7 +1,7 @@
 <template>
     <div class="ai-card">
       <div class="card-header">
-        <span class="card-icon">🧠</span>
+        <el-icon class="card-icon"><ChatLineRound /></el-icon>
         <span class="card-title">智能助手</span>
       </div>
       
@@ -55,6 +55,7 @@
   import { useJournalStore } from '../stores/journal'
   import { useMemoStore } from '../stores/memo'
   import { sendMessageStream } from '../services/ai'
+  import { ChatLineRound } from '@element-plus/icons-vue'
   
   const ledgerStore = useLedgerStore()
   const journalStore = useJournalStore()
@@ -146,33 +147,34 @@
   
   <style scoped>
   .ai-card {
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 2px solid #f0f0f0;
-  }
-  
-  .card-icon {
-    font-size: 24px;
-  }
-  
-  .card-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #2c3e50;
-  }
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.card-icon {
+  font-size: 22px;
+  color: #f59f00;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
   
   .data-summary {
     display: grid;
@@ -259,4 +261,20 @@
   .input-area :deep(.el-input__wrapper) {
     border-radius: 24px;
   }
+
+  /* 统一卡片圆角 */
+.weather-card,
+.todo-card,
+.ai-card {
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.weather-card:hover,
+.todo-card:hover,
+.ai-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
   </style>

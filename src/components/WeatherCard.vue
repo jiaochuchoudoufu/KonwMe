@@ -1,7 +1,7 @@
 <template>
     <div class="weather-card" v-if="weatherStore.weather">
       <div class="card-header">
-        <span class="card-icon">🌤️</span>
+        <el-icon class="card-icon"><Sunny /></el-icon>
         <span class="card-title">今日天气</span>
       </div>
       <div class="weather-main">
@@ -17,7 +17,7 @@
         <span>🌬️ {{ weatherStore.weather.windSpeed }} km/h</span>
       </div>
       <div v-if="weatherAnalysis" class="weather-tip">
-        <span class="tip-icon">🤖</span>
+        <el-icon class="tip-icon"><ChatDotRound /></el-icon>
         <span class="tip-text">{{ weatherAnalysis }}</span>
       </div>
       <div v-else-if="analysisLoading" class="weather-tip loading">
@@ -30,6 +30,7 @@
   import { ref, onMounted, watch } from 'vue'
   import { useWeatherStore } from '../stores/weather'
   import { analyzeWeatherImpact } from '../services/ai'
+  import { Sunny, ChatDotRound } from '@element-plus/icons-vue'
   
   const weatherStore = useWeatherStore()
   const analysisLoading = ref(false)
@@ -69,21 +70,32 @@ onMounted(async () => {
   
   <style scoped>
   .weather-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
-    padding: 16px;
-    color: white;
-    margin-bottom: 16px;
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: 600;
-  }
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: none;  /* 父级已提供阴影 */
+  margin-bottom: 0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.card-icon {
+  font-size: 22px;
+  color: #f59f00;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
   
   .weather-main {
     display: flex;
@@ -136,4 +148,20 @@ onMounted(async () => {
   .weather-tip.loading {
     opacity: 0.7;
   }
+
+  /* 统一卡片圆角 */
+.weather-card,
+.todo-card,
+.ai-card {
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.weather-card:hover,
+.todo-card:hover,
+.ai-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
   </style>

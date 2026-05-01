@@ -9,26 +9,26 @@
           :collapse-transition="false"
           :default-active="$route.path"
         >
-          <el-menu-item index="/">
-            <span class="menu-icon">🏠</span>
-            <span class="menu-label">首页</span>
-          </el-menu-item>
-          <el-menu-item index="/ledger">
-            <span class="menu-icon">📊</span>
-            <span class="menu-label">记账本</span>
-          </el-menu-item>
-          <el-menu-item index="/journal">
-            <span class="menu-icon">📝</span>
-            <span class="menu-label">日记</span>
-          </el-menu-item>
-          <el-menu-item index="/memo">
-            <span class="menu-icon">📌</span>
-            <span class="menu-label">备忘录</span>
-          </el-menu-item>
-          <el-menu-item index="/data-manager">
-            <span class="menu-icon">💾</span>
-            <span class="menu-label">数据管理</span>
-          </el-menu-item>
+        <el-menu-item index="/">
+    <el-icon><HomeFilled /></el-icon>
+    <span class="menu-label">首页</span>
+  </el-menu-item>
+  <el-menu-item index="/ledger">
+    <el-icon><Money /></el-icon>
+    <span class="menu-label">记账本</span>
+  </el-menu-item>
+  <el-menu-item index="/journal">
+    <el-icon><EditPen /></el-icon>
+    <span class="menu-label">日记</span>
+  </el-menu-item>
+  <el-menu-item index="/memo">
+    <el-icon><Check /></el-icon>
+    <span class="menu-label">备忘录</span>
+  </el-menu-item>
+  <el-menu-item index="/data-manager">
+    <el-icon><DataAnalysis /></el-icon>
+    <span class="menu-label">数据管理</span>
+  </el-menu-item>
         </el-menu>
         
         <!-- 折叠/展开按钮 -->
@@ -50,15 +50,15 @@
       
       <div class="bottom-nav">
         <div 
-          v-for="item in navItems" 
-          :key="item.path"
-          class="nav-item"
-          :class="{ active: $route.path === item.path }"
-          @click="navigateTo(item.path)"
-        >
-          <span class="nav-icon">{{ item.icon }}</span>
-          <span class="nav-label">{{ item.label }}</span>
-        </div>
+    v-for="item in navItems" 
+    :key="item.path"
+    class="nav-item"
+    :class="{ active: $route.path === item.path }"
+    @click="navigateTo(item.path)"
+  >
+    <el-icon class="nav-icon"><component :is="item.icon" /></el-icon>
+    <span class="nav-label">{{ item.label }}</span>
+  </div>
       </div>
     </div>
 
@@ -68,6 +68,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { HomeFilled, Money, EditPen, Check, DataAnalysis } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -81,11 +82,11 @@ const sidebarWidth = computed(() => isCollapse.value ? '64px' : '200px')
 
 // 底部导航栏配置
 const navItems = [
-  { path: '/', label: '首页', icon: '🏠' },
-  { path: '/ledger', label: '记账', icon: '📊' },
-  { path: '/journal', label: '日记', icon: '📝' },
-  { path: '/memo', label: '备忘', icon: '📌' },
-  { path: '/data-manager', label: '数据', icon: '💾' },
+  { path: '/', label: '首页', icon: HomeFilled },
+  { path: '/ledger', label: '记账', icon: Money },
+  { path: '/journal', label: '日记', icon: EditPen },
+  { path: '/memo', label: '备忘', icon: Check },
+  { path: '/data-manager', label: '数据', icon: DataAnalysis }
 ]
 
 const handleResize = () => {
@@ -281,5 +282,86 @@ button,
   .el-textarea__inner {
     font-size: 16px !important; /* 防止 iOS 缩放 */
   }
+}
+
+/* 全局样式 */
+:root {
+  --primary-color: #f59f00;
+  --primary-light: #fff3e0;
+  --primary-dark: #e67700;
+  --success-color: #67c23a;
+  --danger-color: #f56c6c;
+  --text-primary: #2c3e50;
+  --text-secondary: #868e96;
+  --bg-gray: #f8f9fa;
+  --border-radius: 16px;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #f5f7fa;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 统一卡片样式 */
+.card-common {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.card-common:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* 统一按钮样式 */
+.el-button--primary {
+  background: linear-gradient(135deg, #f59f00, #f76707);
+  border: none;
+  border-radius: 24px;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.el-button--primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 159, 0, 0.3);
+}
+
+.el-button--primary:active {
+  transform: translateY(0);
+}
+
+/* App.vue 侧边栏样式优化 */
+.sidebar {
+  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
+  border-right: none;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.04);
+}
+
+.el-menu-item {
+  border-radius: 12px;
+  margin: 8px 12px;
+  transition: all 0.2s ease;
+}
+
+.el-menu-item:hover {
+  background: var(--primary-light) !important;
+  color: var(--primary-color) !important;
+}
+
+.el-menu-item.is-active {
+  background: linear-gradient(135deg, var(--primary-light), #ffe8cc) !important;
+  color: var(--primary-dark) !important;
+  font-weight: 500;
 }
 </style>

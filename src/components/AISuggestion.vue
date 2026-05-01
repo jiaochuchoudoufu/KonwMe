@@ -2,7 +2,7 @@
     <div class="ai-suggestion-card">
       <div class="card-header">
         <div class="header-left">
-          <span class="icon">🤖</span>
+          <el-icon class="icon"><Opportunity /></el-icon>
           <span class="title">AI 智能建议</span>
           
         </div>
@@ -13,7 +13,7 @@
           :loading="loading"
           class="refresh-btn"
         >
-          🔄 刷新
+        <el-icon><Refresh /></el-icon> 刷新
         </el-button>
       </div>
       
@@ -40,6 +40,7 @@
   import { useJournalStore } from '../stores/journal'
   import { useMemoStore } from '../stores/memo'
   import { sendMessageStream } from '../services/ai'
+  import { Opportunity, Refresh } from '@element-plus/icons-vue'
   
   const ledgerStore = useLedgerStore()
   const journalStore = useJournalStore()
@@ -216,4 +217,17 @@
     padding-top: 8px;
   }
   
+  .ai-suggestion-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 20px;
+  color: white;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.ai-suggestion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
   </style>

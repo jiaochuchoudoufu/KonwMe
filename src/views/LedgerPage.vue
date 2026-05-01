@@ -67,7 +67,8 @@
         :loading="aiLoading"
         class="ai-btn"
       >
-        🤖 AI 分析我的消费
+      <el-icon class="btn-icon"><ChatDotRound /></el-icon>
+      <span>AI 分析我的消费</span>
       </el-button>
     </div>
 
@@ -208,6 +209,7 @@ import { Loading } from '@element-plus/icons-vue'
 import { useLedgerStore, type LedgerRecord } from '../stores/ledger'
 import { analyzeExpenseStream } from '../services/ai'
 import ExpenseChart from '../components/ExpenseChart.vue'
+import { ChatDotRound } from '@element-plus/icons-vue'
 
 const store = useLedgerStore()
 const showDialog = ref(false)
@@ -666,5 +668,47 @@ const batchDelete = () => {
   .ai-btn {
     width: 100%;
   }
+}
+
+/* 页面标题统一 */
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+}
+
+/* AI 分析按钮样式 */
+.ai-button-wrapper {
+  text-align: center;
+  margin: 24px 0;
+}
+
+.ai-analysis-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  border-radius: 48px !important;
+  padding: 14px 32px !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+.ai-analysis-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.ai-analysis-btn:active {
+  transform: translateY(0);
+}
+
+.btn-icon {
+  margin-right: 8px;
+  font-size: 18px;
 }
 </style>

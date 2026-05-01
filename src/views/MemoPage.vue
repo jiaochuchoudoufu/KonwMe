@@ -379,4 +379,15 @@ h1 {
     margin: 20px auto;
   }
 }
+
+/* 页面标题统一 */
+h1 {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--primary-color);
+  display: inline-block;
+}
 </style>

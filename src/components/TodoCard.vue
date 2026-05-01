@@ -1,7 +1,7 @@
 <template>
     <div class="todo-card">
       <div class="card-header">
-        <span class="card-icon">📋</span>
+        <el-icon class="card-icon"><List /></el-icon>
         <span class="card-title">今日待办</span>
         <router-link to="/memo" class="more-link">查看更多 →</router-link>
       </div>
@@ -27,6 +27,7 @@
   <script setup lang="ts">
   import { computed } from 'vue'
   import { useMemoStore } from '../stores/memo'
+  import { List } from '@element-plus/icons-vue'
   
   const memoStore = useMemoStore()
   
@@ -58,21 +59,33 @@
   
   <style scoped>
   .todo-card {
-    background: white;
-    border-radius: 20px;
-    padding: 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    font-size: 16px;
-    font-weight: 600;
-  }
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: none;
+  margin-bottom: 0;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.card-icon {
+  font-size: 22px;
+  color: #f59f00;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
   
   .more-link {
     margin-left: auto;
@@ -113,4 +126,20 @@
     color: #adb5bd;
     margin-top: 8px;
   }
+
+  /* 统一卡片圆角 */
+.weather-card,
+.todo-card,
+.ai-card {
+  border-radius: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.weather-card:hover,
+.todo-card:hover,
+.ai-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
   </style>
