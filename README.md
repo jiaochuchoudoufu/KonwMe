@@ -1,43 +1,63 @@
 # lifelog-ai
-
-This template should help get you started developing with Vue 3 in Vite.
 预览网址：https://jiaochuchoudoufu.github.io/KonwMe/
 
-## Recommended IDE Setup
+# LifeLog AI
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+> 你的智能生活记录助手
 
-## Recommended Browser Setup
+基于 Vue 3 的个人生活记录应用，集成 AI 分析功能。
 
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
+## ✨ 功能特性
 
-## Type Support for `.vue` Imports in TS
+### 📊 记账本
+- 收入/支出记录管理
+- 月度统计图表（折线图、饼图）
+- AI 消费分析
+- 批量删除
+- 本地存储
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+### 📝 心情日记
+- 每日心情记录
+- 5 种心情标签
+- AI 情绪分析
 
-## Customize configuration
+### 📌 备忘录
+- 待办事项管理
+- 优先级设置
+- 今日提醒
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+### 🤖 AI 助手
+- 流式对话
+- 多会话管理
+- 上下文记忆
 
-## Project Setup
+### 🌤️ 天气助手
+- 实时天气
+- 自动定位
+- AI 天气分析
 
-```sh
+### 💾 数据管理
+- 导出/导入备份
+- 一键清除
+
+## 🛠️ 技术栈
+
+| 技术 | 用途 |
+|------|------|
+| Vue 3 | 前端框架 |
+| TypeScript | 类型系统 |
+| Pinia | 状态管理 |
+| Vue Router | 路由管理 |
+| Element Plus | UI 组件库 |
+| ECharts | 数据可视化 |
+| DeepSeek API | AI 对话 |
+
+## 🚀 快速开始
+
+### 环境要求
+- Node.js >= 18
+- npm >= 9
+
+### 安装依赖
+```bash
 npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```

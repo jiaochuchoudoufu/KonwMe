@@ -119,15 +119,19 @@ onUnmounted(() => {
 /* ========== PC端样式 ========== */
 .pc-layout {
   height: 100%;
+  overflow: hidden;
 }
 
 .sidebar {
+  height: 100vh;
   background: linear-gradient(180deg, #f5f7fa 0%, #e9ecef 100%);
   border-right: 1px solid #e0e0e0;
   display: flex;
   flex-direction: column;
   transition: width 0.3s ease;
   position: relative;
+  overflow-y: auto;  /* 侧边栏内部滚动 */
+  overflow-x: hidden;
 }
 
 .el-menu {
@@ -135,6 +139,7 @@ onUnmounted(() => {
   flex: 1;
   background: transparent;
   margin-top: 20px;
+  overflow-y: auto;
 }
 
 .el-menu-item {
@@ -167,10 +172,9 @@ onUnmounted(() => {
 }
 
 .collapse-btn {
-  position: absolute;
+  position: sticky;
   bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin: 0 auto 20px;
   width: 30px;
   height: 30px;
   background: #fff;
@@ -184,6 +188,13 @@ onUnmounted(() => {
   z-index: 10;
 }
 
+.el-main {
+  overflow-y: auto;
+  height: 100vh;  /* 改为 100vh */
+  padding: 20px;
+  background: #f5f7fa;
+}
+
 .collapse-btn:hover {
   background: #f0f0f0;
   transform: translateX(-50%) scale(1.05);
@@ -192,6 +203,7 @@ onUnmounted(() => {
 /* ========== 移动端样式 ========== */
 .mobile-layout {
   height: 100%;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -200,6 +212,9 @@ onUnmounted(() => {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 60px;
+  padding: 16px;
+  padding-bottom: 70px;
+  background: #f5f7fa;
 }
 
 .bottom-nav {
