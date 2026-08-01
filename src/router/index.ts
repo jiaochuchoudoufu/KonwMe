@@ -25,6 +25,11 @@ const routes = [
     path: '/data-manager',
     name: 'data-manager',
     component: () => import('../components/DataManager.vue')
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: () => import('../views/SettingsPage.vue'),
   }
 ]
 

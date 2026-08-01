@@ -1,6 +1,12 @@
 import axios from 'axios'
 
-const API_KEY = import.meta.env.VITE_DEEPSEEK_API_KEY
+// 获取用户自定义 Key，如果没有则用默认的
+const getApiKey = (): string => {
+  const userKey = localStorage.getItem('user_deepseek_key')
+  return userKey || import.meta.env.VITE_DEEPSEEK_API_KEY
+}
+
+
 const API_URL = 'https://api.deepseek.com/v1/chat/completions'
 
 export interface ChatMessage {
@@ -8,59 +14,72 @@ export interface ChatMessage {
   content: string
 }
 
-//流式输出
+// 流式输出
 export async function sendMessageStream(
-    messages: ChatMessage[],
-    onChunk: (chunk: string) => void
+  messages: ChatMessage[],
+  onChunk: (chunk: string) => void
 ): Promise<string> {
-    try {
-        const response = await fetch(API_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: messages,
-            stream: true,  // 开启流式输出
-          }),
-        })
+  try {
+    const API_KEY = getApiKey()
     
-        const reader = response.body?.getReader()
-        const decoder = new TextDecoder()
-        let fullContent = ''
-    
-        while (reader) {
-          const { done, value } = await reader.read()
-          if (done) break
-    
-          const chunk = decoder.decode(value)
-          const lines = chunk.split('\n')
-          
-          for (const line of lines) {
-            if (line.startsWith('data: ') && line !== 'data: [DONE]') {
-              try {
-                const json = JSON.parse(line.slice(6))
-                const content = json.choices[0]?.delta?.content || ''
-                if (content) {
-                  fullContent += content
-                  onChunk(content)  // 逐字回调
-                }
-              } catch (e) {
-                // 忽略解析错误
-              }
+    if (!API_KEY) {
+      onChunk('⚠️ 请先配置你的 DeepSeek API Key（在设置页面中配置）')
+      return '请先配置 API Key'
+    }
+
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'deepseek-chat',
+        messages: messages,
+        stream: true,
+      }),
+    })
+
+    // 检查是否认证失败
+    if (response.status === 401) {
+      onChunk('⚠️ API Key 无效，请检查你的 DeepSeek API Key 是否正确（在设置页面中修改）')
+      return 'API Key 无效'
+    }
+
+    const reader = response.body?.getReader()
+    const decoder = new TextDecoder()
+    let fullContent = ''
+
+    while (reader) {
+      const { done, value } = await reader.read()
+      if (done) break
+
+      const chunk = decoder.decode(value)
+      const lines = chunk.split('\n')
+      
+      for (const line of lines) {
+        if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+          try {
+            const json = JSON.parse(line.slice(6))
+            const content = json.choices[0]?.delta?.content || ''
+            if (content) {
+              fullContent += content
+              onChunk(content)
             }
+          } catch (e) {
+            // 忽略解析错误
           }
         }
-    
-        return fullContent
-      } catch (error) {
-        console.error('AI 请求失败:', error)
-        onChunk('AI 服务暂时不可用，请稍后再试。')
-        return 'AI 服务暂时不可用，请稍后再试。'
       }
     }
+
+    return fullContent
+  } catch (error) {
+    console.error('AI 请求失败:', error)
+    onChunk('AI 服务暂时不可用，请稍后再试。')
+    return 'AI 服务暂时不可用，请稍后再试。'
+  }
+}
     
     // 分析消费记录（流式版本）
     export async function analyzeExpenseStream(

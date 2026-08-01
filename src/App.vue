@@ -29,6 +29,10 @@
     <el-icon><DataAnalysis /></el-icon>
     <span class="menu-label">数据管理</span>
   </el-menu-item>
+  <el-menu-item index="/settings">
+    <el-icon><Setting /></el-icon>
+    <span class="menu-label">设置</span>
+  </el-menu-item>
         </el-menu>
         
         <!-- 折叠/展开按钮 -->
@@ -68,7 +72,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { HomeFilled, Money, EditPen, Check, DataAnalysis } from '@element-plus/icons-vue'
+import { HomeFilled, Money, EditPen, Check, DataAnalysis, Setting } from '@element-plus/icons-vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -86,7 +90,8 @@ const navItems = [
   { path: '/ledger', label: '记账', icon: Money },
   { path: '/journal', label: '日记', icon: EditPen },
   { path: '/memo', label: '备忘', icon: Check },
-  { path: '/data-manager', label: '数据', icon: DataAnalysis }
+  { path: '/data-manager', label: '数据', icon: DataAnalysis },
+  { path: '/settings', label: '设置', icon: Setting }
 ]
 
 const handleResize = () => {
